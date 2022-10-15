@@ -27,13 +27,15 @@ def index():
 def login():
     username = request.form.get('username')
     password = request.form.get('password')
+    if username == '' or password == '':
+        return render_template('login_errempty.html')  # шаблон если поля пустые
     cursor.execute('SELECT * FROM service.users WHERE login=%s AND password=%s',
                    (str(username), str(password)))
     records = list(cursor.fetchall())
-    if len(records) != 0:
-        return render_template('account.html', full_name=records[0][1])
+    if len(records) != 0:  # смотрим есть ли данные о пользователе с данным логином и паролем.
+        return render_template('account.html', full_name=records[0][1], username=username, password=password)
     else:
-        return render_template('login_errlap.html')  # добавить html
+        return render_template('login_errlap.html')  # шаблон если пользователь не найден
 
 
 app.run(debug=True)
