@@ -29,9 +29,15 @@ def login():
         if request.form.get("login"):
             username = request.form.get('username')
             password = request.form.get('password')
+            if username == '' or password == '':
+                return render_template('login_errempty.html')  # шаблон если поля пустые
             cursor.execute("SELECT * FROM service.users WHERE login=%s AND password=%s", (str(username), str(password)))
             records = list(cursor.fetchall())
-            return render_template('account.html', full_name=records[0][1])
+            if len(records) != 0:  # смотрим есть ли данные о пользователе с данным логином и паролем
+                print(records)
+                return render_template('account.html', full_name=records[0][1])
+            else:
+                return render_template('login_errlap.html')  # шаблон если пользователь не найден
         elif request.form.get("registration"):
             return redirect("/registration/")
     return render_template('login.html')
