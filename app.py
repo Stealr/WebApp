@@ -31,7 +31,7 @@ def login():
         if request.form.get("login"):
             username = request.form.get('username')
             password = request.form.get('password')
-            if username == '' or password == '':
+            if username.strip() == '' or password.strip() == '':
                 return render_template('login_errempty.html')  # шаблон если поля пустые
             cursor.execute("SELECT * FROM service.users WHERE login=%s AND password=%s", (str(username), str(password)))
             records = list(cursor.fetchall())
@@ -51,7 +51,7 @@ def registration():
             name = request.form.get('name')
             login = request.form.get('login')
             password = request.form.get('password')
-            if name == '' or login == '' or password == '':
+            if name.strip() == '' or login.strip() == '' or password.strip() == '':
                 return render_template('registration_errempty.html')
             cursor.execute("SELECT * FROM service.users WHERE login=\'%s\'" % (str(login)))
             records = list(cursor.fetchall())
